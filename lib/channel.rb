@@ -57,6 +57,15 @@ module TeamSpeak3
       @max_family_clients = params[:channel_maxfamilyclients].to_i
     end
 
+    def codec_name
+      return "Speex Narrowband" if @codec == 0
+      return "Speex Wideband" if @codec == 1
+      return "Speex Ultra-Wideband" if @codec == 2
+      return "CELT Mono" if @codec == 3
+      return "Opus Voice" if @codec == 4
+      return "Opus Music" if @codec == 5
+    end
+
     def permanent?
       flag?(:permanent)
     end

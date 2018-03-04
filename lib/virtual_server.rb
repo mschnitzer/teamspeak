@@ -29,11 +29,18 @@ module TeamSpeak3
     def channels
       check_active_server
 
-      @server.execute 'channellist'
+      channels_list = []
+      channels = @server.execute "channellist -topic -flags -voice -limits -icon"
+
+      channels[:data].each do |channel|
+        channels_list << TeamSpeak3::Channel.new(self, channel)
+      end
+
+      channels_list
     end
 
     def ==(target)
-      @id == target.to_i
+      @id == target
     end
 
     private

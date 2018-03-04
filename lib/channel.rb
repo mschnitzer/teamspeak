@@ -1,5 +1,7 @@
 module TeamSpeak3
   class Channel
+    attr_reader :virtual_server
+
     attr_reader :id
     attr_reader :pid
     attr_reader :name
@@ -22,6 +24,8 @@ module TeamSpeak3
     attr_reader :max_family_clients
 
     def initialize(virtual_server, params)
+      @virtual_server = virtual_server
+
       @id = params[:cid].to_i
       @pid = params[:pid].to_i
       @name = params[:channel_name]
@@ -71,6 +75,10 @@ module TeamSpeak3
 
     def flag?(flag)
       @flags.include?(flag.to_sym)
+    end
+
+    def send_message(message)
+      virtual_server.server.send_message_to(self, message)
     end
 
     def ==(target)

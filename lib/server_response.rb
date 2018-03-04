@@ -37,7 +37,7 @@ module TeamSpeak3
               value = nil
             end
 
-            result[key.to_sym] = parse_value(value)
+            result[key.to_sym] = TeamSpeak3::CommandParameter.decode(value)
           end
 
           return result if opts[:ignore_array_result]
@@ -45,23 +45,6 @@ module TeamSpeak3
         end
 
         result_list
-      end
-
-      def parse_value(value)
-        return unless value
-
-        value.gsub!("\\\\", "\\")
-        value.gsub!("\/", "/")
-        value.gsub!("\\s", " ")
-        value.gsub!("\\p", "|")
-        value.gsub!("\\a", "\a")
-        value.gsub!("\\b", "\b")
-        value.gsub!("\\f", "\f")
-        value.gsub!("\\n", "\n")
-        value.gsub!("\\r", "\r")
-        value.gsub!("\\t", "\t")
-        value.gsub!("\\v", "\v")
-        value
       end
 
       def split_data_from_errors(response)

@@ -60,6 +60,36 @@ module TeamSpeak3
       server_list
     end
 
+    def send_message_to(target, message, target_type = :auto)
+      if target_type == :auto
+        if target.is_a?(TeamSpeak3::VirtualServer)
+          target_id = target.id
+          target_type_id = 3
+
+          select_server target.id
+        elsif target.is_a?(TeamSpeak3::Channel)
+          target_id = target.id
+          target_type_id = 2
+
+          select_server target.virtual_server.id
+        else
+          raise TeamSpeak3::Exceptions::InvalidTarget.new(target)
+        end
+      else
+        target_id = target
+
+        target_type_id = 3 if target_type.to_sym == :server
+        target_type_id = 2 if target_type.to_sym == :channel
+        target_type_id = 1 if target_type.to_sym == :client
+
+        raise TeamSpeak3::Exceptions::InvalidTargetType.new(target_type) unless target_type_id
+      end
+
+      execute "sendtextmessage target=#{target_id} targetmode=#{target_type_id} " \
+        "msg=#{TeamSpeak3::CommandParameter.encode(message)}"
+      true
+    end
+
     def execute(command)
       @socket.puts(command)
 

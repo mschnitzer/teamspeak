@@ -39,6 +39,10 @@ module TeamSpeak3
       channels_list
     end
 
+    def send_message(message)
+      server.send_message_to(self, message)
+    end
+
     def ==(target)
       @id == target
     end

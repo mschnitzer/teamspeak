@@ -49,10 +49,10 @@ module TeamSpeak3
       @active_server = virtual_server_id
     end
 
-    def virtual_servers(opts = [])
+    def virtual_servers
       server_list = []
 
-      servers = execute "serverlist #{parse_command_options(opts)}"
+      servers = execute "serverlist -uid -all"
       servers[:data].each do |server|
         server_list << TeamSpeak3::VirtualServer.new(self, server)
       end
@@ -82,12 +82,6 @@ module TeamSpeak3
 
     def verify_connection
       raise TeamSpeak3::Exceptions::NotConnected, 'Not connected to a TeamSpeak 3 server.' unless @socket
-    end
-
-    def parse_command_options(opts)
-      options = ""
-      opts.each { |opt| options += "-#{opt.to_s} " }
-      options[0..-2]
     end
   end
 end

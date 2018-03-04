@@ -3,6 +3,7 @@ module TeamSpeak3
     attr_reader :ip_address
     attr_reader :query_port
     attr_reader :socket
+    attr_reader :active_server
 
     def initialize(ip_address, query_port, opts = {})
       @ip_address = ip_address
@@ -45,13 +46,18 @@ module TeamSpeak3
 
     def select_server(virtual_server_id)
       execute "use sid=#{virtual_server_id}"
-      true
+      @active_server = virtual_server_id
     end
 
-    private
+    def virtual_servers(opts = [])
+      server_list = []
 
-    def verify_connection
-      raise TeamSpeak3::Exceptions::NotConnected, 'Not connected to a TeamSpeak 3 server.' unless @socket
+      servers = execute "serverlist #{parse_command_options(opts)}"
+      servers[:data].each do |server|
+        server_list << TeamSpeak3::VirtualServer.new(self, server)
+      end
+
+      server_list
     end
 
     def execute(command)
@@ -70,6 +76,18 @@ module TeamSpeak3
       end
 
       response
+    end
+
+    private
+
+    def verify_connection
+      raise TeamSpeak3::Exceptions::NotConnected, 'Not connected to a TeamSpeak 3 server.' unless @socket
+    end
+
+    def parse_command_options(opts)
+      options = ""
+      opts.each { |opt| options += "-#{opt.to_s} " }
+      options[0..-2]
     end
   end
 end

@@ -33,7 +33,7 @@ module TeamSpeak3
     end
 
     def ==(target)
-      @id == target
+      @id == target.to_i
     end
 
     private

@@ -43,6 +43,11 @@ module TeamSpeak3
       true
     end
 
+    def select_server(virtual_server_id)
+      execute "use sid=#{virtual_server_id}"
+      true
+    end
+
     private
 
     def verify_connection

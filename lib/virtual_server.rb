@@ -11,6 +11,7 @@ module TeamSpeak3
     attr_reader :slots
     attr_reader :uptime
     attr_reader :autostart
+    attr_reader :uid
 
     def initialize(server, params)
       @server = server
@@ -24,6 +25,7 @@ module TeamSpeak3
       @slots = params[:virtualserver_maxclients].to_i
       @uptime = Time.now - params[:virtualserver_uptime].to_i
       @autostart = params[:virtualserver_uptime].to_i == 1
+      @uid = params[:virtualserver_unique_identifier]
     end
 
     def channels

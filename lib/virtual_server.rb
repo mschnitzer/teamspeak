@@ -22,7 +22,7 @@ module TeamSpeak3
       @clients_online = params[:virtualserver_clientsonline].to_i
       @query_clients_online = params[:virtualserver_queryclientsonline].to_i
       @slots = params[:virtualserver_maxclients].to_i
-      @uptime = params[:virtualserver_uptime].to_i
+      @uptime = Time.now - params[:virtualserver_uptime].to_i
       @autostart = params[:virtualserver_uptime].to_i == 1
     end
 

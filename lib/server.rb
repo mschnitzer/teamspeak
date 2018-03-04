@@ -1,4 +1,4 @@
-module TeamSpeak
+module TeamSpeak3
   class Server
     attr_reader :ip_address
     attr_reader :query_port
@@ -21,10 +21,10 @@ module TeamSpeak
         
         @socket.waitfor(/Welcome to the TeamSpeak 3 ServerQuery interface/)
       rescue Net::ReadTimeout => err 
-        raise TeamSpeak::Exceptions::ServerConnectionFailed.new(@ip_address, @query_port, \
+        raise TeamSpeak3::Exceptions::ServerConnectionFailed.new(@ip_address, @query_port, \
           "Timeout while waiting for TeamSpeak 3 welcome message.")
       rescue Net::OpenTimeout, Errno::ECONNREFUSED => err
-        raise TeamSpeak::Exceptions::ServerConnectionFailed.new(@ip_address, @query_port, \
+        raise TeamSpeak3::Exceptions::ServerConnectionFailed.new(@ip_address, @query_port, \
           "Could not open connection to server at #{@ip_address}:#{@query_port}")
       end
 
@@ -36,8 +36,8 @@ module TeamSpeak
 
       begin
         execute "login client_login_name=#{query_user} client_login_password=#{query_pass}"
-      rescue TeamSpeak::Exceptions::CommandExecutionFailed => err
-        raise TeamSpeak::Exceptions::QueryLoginFailed, err.message
+      rescue TeamSpeak3::Exceptions::CommandExecutionFailed => err
+        raise TeamSpeak3::Exceptions::QueryLoginFailed, err.message
       end
 
       true
@@ -46,7 +46,7 @@ module TeamSpeak
     private
 
     def verify_connection
-      raise TeamSpeak::Exceptions::NotConnected, 'Not connected to a TeamSpeak 3 server.' unless @socket
+      raise TeamSpeak3::Exceptions::NotConnected, 'Not connected to a TeamSpeak 3 server.' unless @socket
     end
 
     def execute(command)
@@ -55,9 +55,9 @@ module TeamSpeak
       # every response contains an error information. so we wait until we receive a response
       response = @socket.waitfor(/error id=.*/)
 
-      response = TeamSpeak::ServerResponse.parse(response)
+      response = TeamSpeak3::ServerResponse.parse(response)
       if response[:errors][:msg] != 'ok'
-        raise TeamSpeak::Exceptions::CommandExecutionFailed.new(
+        raise TeamSpeak3::Exceptions::CommandExecutionFailed.new(
           response[:errors][:id],
           response[:errors][:msg],
           command,

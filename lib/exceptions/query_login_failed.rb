@@ -1,6 +1,6 @@
-module TeamSpeak
+module TeamSpeak3
   module Exceptions
-    class QueryLoginFailed < TeamSpeak::Exceptions::StandardException
+    class QueryLoginFailed < TeamSpeak3::Exceptions::StandardException
       def initialize(message)
         @message = message
       end

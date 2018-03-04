@@ -1,6 +1,6 @@
-module TeamSpeak
+module TeamSpeak3
   module Exceptions
-    class NotConnected < TeamSpeak::Exceptions::StandardException
+    class NotConnected < TeamSpeak3::Exceptions::StandardException
       def initialize(message)
         @message = message
       end

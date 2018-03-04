@@ -1,6 +1,6 @@
-module TeamSpeak
+module TeamSpeak3
   module Exceptions
-    class CommandExecutionFailed < TeamSpeak::Exceptions::StandardException
+    class CommandExecutionFailed < TeamSpeak3::Exceptions::StandardException
       attr_reader :error_id
       attr_reader :command
 

@@ -1,4 +1,4 @@
-module TeamSpeak
+module TeamSpeak3
   module Exceptions
     class StandardException < Exception
       attr_reader :message

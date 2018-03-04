@@ -1,4 +1,4 @@
-module TeamSpeak
+module TeamSpeak3
   class ServerResponse
     class << self
       def parse(response)

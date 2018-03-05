@@ -41,6 +41,19 @@ module TeamSpeak3
       channels_list
     end
 
+    def clients
+      check_active_server
+
+      clients_list = []
+      clients = @server.execute "clientlist -uid -away -voice -times -groups -info -icon -country"
+
+      clients[:data].each do |client|
+        clients_list << TeamSpeak3::Client.new(self, client)
+      end
+
+      clients_list
+    end
+
     def send_message(message)
       server.send_message_to(self, message)
     end

@@ -85,6 +85,16 @@ module TeamSpeak3
       @input_muted
     end
 
+    def kick_from_server!(reason = nil)
+      virtual_server.server.kick_client!(client_id, :server, reason)
+      true
+    end
+
+    def kick_from_channel!(reason = nil)
+      virtual_server.server.kick_client!(client_id, :channel, reason)
+      true
+    end
+
     def output_hardware?
       @output_hardware
     end

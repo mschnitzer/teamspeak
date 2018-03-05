@@ -60,6 +60,29 @@ module TeamSpeak3
       server_list
     end
 
+    def kick_client!(client_id, action, reason = nil)
+      # set correct kick action
+      action_id = nil
+      action_id = 4 if action == :channel
+      action_id = 5 if action == :server
+
+      raise TeamSpeak3::Exceptions::InvalidKickAction.new(action) unless action_id
+
+      # handle multiple client ids
+      client_ids = ""
+      if client_id.is_a?(Integer)
+        client_ids = "clid=#{client_id}"
+      elsif client_id.is_a?(Array)
+        client_id.each { |id| client_ids += "clid=#{id}|" }
+        client_ids = client_ids[0..-2]
+      end
+
+      # execute command
+      command = "clientkick #{client_ids} reasonid=#{action_id}"
+      command += " reasonmsg=#{TeamSpeak3::CommandParameter.encode(reason)}" if reason
+      execute command
+    end
+
     def send_message_to(target, message, target_type = :auto)
       if target_type == :auto
         if target.is_a?(TeamSpeak3::VirtualServer)

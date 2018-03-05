@@ -3,6 +3,7 @@ require_relative 'exceptions/standard_exception.rb'
 
 # alphabetical order of exceptions
 require_relative 'exceptions/command_execution_failed.rb'
+require_relative 'exceptions/invalid_kick_action.rb'
 require_relative 'exceptions/invalid_target.rb'
 require_relative 'exceptions/invalid_target_type.rb'
 require_relative 'exceptions/not_connected.rb'

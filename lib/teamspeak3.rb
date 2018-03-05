@@ -1,5 +1,9 @@
 require 'net/telnet'
 
+module TeamSpeak3
+  VERSION = "0.0.3"
+end
+
 # exceptions shall be required first
 require_relative 'exceptions.rb'
 

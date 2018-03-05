@@ -1,5 +1,7 @@
 ## Release 0.0.3 (unknown)
 
+* Add `TeamSpeak3::VERSION` to fetch the current version of this library.
+
 ## Release 0.0.2 (2018-03-05)
 
 * `TeamSpeak3::VirtualServer` class was added to handle virtual servers.

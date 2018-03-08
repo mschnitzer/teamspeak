@@ -29,10 +29,8 @@ module TeamSpeak3
     end
 
     def channels
-      check_active_server
-
       channels_list = []
-      channels = @server.execute "channellist -topic -flags -voice -limits -icon"
+      channels = execute "channellist -topic -flags -voice -limits -icon"
 
       channels[:data].each do |channel|
         channels_list << TeamSpeak3::Channel.new(self, channel)
@@ -42,10 +40,8 @@ module TeamSpeak3
     end
 
     def clients
-      check_active_server
-
       clients_list = []
-      clients = @server.execute "clientlist -uid -away -voice -times -groups -info -icon -country"
+      clients = execute "clientlist -uid -away -voice -times -groups -info -icon -country"
 
       clients[:data].each do |client|
         clients_list << TeamSpeak3::Client.new(self, client)
@@ -56,6 +52,11 @@ module TeamSpeak3
 
     def send_message(message)
       server.send_message_to(self, message)
+    end
+
+    def execute(command)
+      check_active_server
+      @server.execute(command)
     end
 
     def ==(target)

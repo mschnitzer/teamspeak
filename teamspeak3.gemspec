@@ -10,7 +10,8 @@ Gem::Specification.new do |s|
   s.license     = 'MIT'
 
   s.files       = Dir[
-    'lib/**/*.rb'
+    'lib/**/*.rb',
+    'spec/**/*.rb'
   ]
 
   s.add_runtime_dependency 'net-telnet', '~> 0.1.1'

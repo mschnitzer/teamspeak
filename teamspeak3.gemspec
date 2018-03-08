@@ -14,8 +14,8 @@ Gem::Specification.new do |s|
     'spec/**/*.rb'
   ]
 
-  s.add_runtime_dependency 'net-telnet', '~> 0.1.1'
+  s.add_runtime_dependency 'net-telnet', '~> 0.1', '>= 0.1.1'
 
-  s.add_development_dependency 'rspec', '~> 3.7.0'
-  s.add_development_dependency 'factory_bot', '~> 4.8.2'
+  s.add_development_dependency 'rspec', '~> 3.7', '>= 3.7.0'
+  s.add_development_dependency 'factory_bot', '~> 4.8', '>= 4.8.2'
 end

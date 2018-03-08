@@ -111,6 +111,10 @@ module TeamSpeak3
       @recording
     end
 
+    def send_message(message)
+      virtual_server.server.send_message_to(self, message)
+    end
+
     def talker?
       @talker
     end

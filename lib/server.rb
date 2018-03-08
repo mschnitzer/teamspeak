@@ -95,6 +95,11 @@ module TeamSpeak3
           target_type_id = 2
 
           select_server target.virtual_server.id
+        elsif target.is_a?(TeamSpeak3::Client)
+          target_id = target.client_id
+          target_type_id = 1
+
+          select_server target.virtual_server.id
         else
           raise TeamSpeak3::Exceptions::InvalidTarget.new(target)
         end

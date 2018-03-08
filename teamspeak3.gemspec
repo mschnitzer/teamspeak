@@ -12,4 +12,9 @@ Gem::Specification.new do |s|
   s.files       = Dir[
     'lib/**/*.rb'
   ]
+
+  s.add_runtime_dependency 'net-telnet', '~> 0.1.1'
+
+  s.add_development_dependency 'rspec', '~> 3.7.0'
+  s.add_development_dependency 'factory_bot', '~> 4.8.2'
 end

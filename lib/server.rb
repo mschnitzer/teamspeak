@@ -19,14 +19,17 @@ module TeamSpeak3
           'Timeout' => @opts[:timeout] || 3,
           'Telnetmode' => false
         )
-        
-        @socket.waitfor(/Welcome to the TeamSpeak 3 ServerQuery interface/)
-      rescue Net::ReadTimeout => err 
+
+        @socket.waitfor("Match" => /Welcome to the TeamSpeak 3 ServerQuery interface/, "FailEOF" => true)
+      rescue Net::ReadTimeout
         raise TeamSpeak3::Exceptions::ServerConnectionFailed.new(@ip_address, @query_port, \
           "Timeout while waiting for TeamSpeak 3 welcome message.")
-      rescue Net::OpenTimeout, Errno::ECONNREFUSED => err
+      rescue Net::OpenTimeout, Errno::ECONNREFUSED
         raise TeamSpeak3::Exceptions::ServerConnectionFailed.new(@ip_address, @query_port, \
           "Could not open connection to server at #{@ip_address}:#{@query_port}")
+      rescue EOFError
+        raise TeamSpeak3::Exceptions::ServerConnectionFailed.new(@ip_address, @query_port, \
+          "Server closed the connection.")
       end
 
       true

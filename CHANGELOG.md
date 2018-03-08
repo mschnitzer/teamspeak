@@ -1,6 +1,12 @@
 ## Release 0.0.3 (unknown)
 
 * Add `TeamSpeak3::VERSION` to fetch the current version of this library.
+* Add `TeamSpeak3::Client#send_message` to allow to send messages directly via the client object
+  without going all the way down to the `TeamSpeak3::Server#send_message`
+* Add `TeamSpeak3::VirtualServer#execute` method which is basically a wrapper for `TeamSpeak3::Server#execute`
+  but it always sets the active virtual server correctly.
+* EOF errors will now be handled on connection attempts. (an EOF error will be raised when a connection has
+  been established but gets closed immediately)
 
 ## Release 0.0.2 (2018-03-05)
 

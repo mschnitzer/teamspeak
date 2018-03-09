@@ -2,6 +2,7 @@ module TeamSpeak3
   module CommandParameter
     def self.encode(value)
       return unless value
+      value = value.to_s
 
       value.gsub!("\\", "\\\\")
       value.gsub!("/", "\/")
@@ -19,6 +20,7 @@ module TeamSpeak3
 
     def self.decode(value)
       return unless value
+      value = value.to_s
 
       value.gsub!("\\\\", "\\")
       value.gsub!("\/", "/")

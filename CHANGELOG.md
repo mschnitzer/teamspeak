@@ -7,6 +7,7 @@
   but it always sets the active virtual server correctly.
 * EOF errors will now be handled on connection attempts. (an EOF error will be raised when a connection has
   been established but gets closed immediately)
+* Command execution on TeamSpeak 3 servers (TeamSpeak3::Server#execute) has been refactored.
 
 ## Release 0.0.2 (2018-03-05)
 

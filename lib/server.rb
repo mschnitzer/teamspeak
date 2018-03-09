@@ -39,7 +39,7 @@ module TeamSpeak3
       verify_connection
 
       begin
-        execute "login client_login_name=#{query_user} client_login_password=#{query_pass}"
+        execute :login, client_login_name: query_user, client_login_password: query_pass
       rescue TeamSpeak3::Exceptions::CommandExecutionFailed => err
         raise TeamSpeak3::Exceptions::QueryLoginFailed, err.message
       end
@@ -48,14 +48,14 @@ module TeamSpeak3
     end
 
     def select_server(virtual_server_id)
-      execute "use sid=#{virtual_server_id}"
+      execute :use, sid: virtual_server_id
       @active_server = virtual_server_id
     end
 
     def virtual_servers
       server_list = []
 
-      servers = execute "serverlist -uid -all"
+      servers = execute :serverlist, options: [:uid, :all]
       servers[:data].each do |server|
         server_list << TeamSpeak3::VirtualServer.new(self, server)
       end
@@ -64,26 +64,13 @@ module TeamSpeak3
     end
 
     def kick_client!(client_id, action, reason = nil)
-      # set correct kick action
       action_id = nil
       action_id = 4 if action == :channel
       action_id = 5 if action == :server
 
       raise TeamSpeak3::Exceptions::InvalidKickAction.new(action) unless action_id
 
-      # handle multiple client ids
-      client_ids = ""
-      if client_id.is_a?(Integer)
-        client_ids = "clid=#{client_id}"
-      elsif client_id.is_a?(Array)
-        client_id.each { |id| client_ids += "clid=#{id}|" }
-        client_ids = client_ids[0..-2]
-      end
-
-      # execute command
-      command = "clientkick #{client_ids} reasonid=#{action_id}"
-      command += " reasonmsg=#{TeamSpeak3::CommandParameter.encode(reason)}" if reason
-      execute command
+      execute :clientkick, clid: client_id, reasonid: action_id, reasonmsg: reason
     end
 
     def send_message_to(target, message, target_type = :auto)
@@ -116,13 +103,38 @@ module TeamSpeak3
         raise TeamSpeak3::Exceptions::InvalidTargetType.new(target_type) unless target_type_id
       end
 
-      execute "sendtextmessage target=#{target_id} targetmode=#{target_type_id} " \
-        "msg=#{TeamSpeak3::CommandParameter.encode(message)}"
+      execute :sendtextmessage, target: target_id, targetmode: target_type_id, msg: message
       true
     end
 
-    def execute(command)
-      @socket.puts(command)
+    def execute(command, params = {})
+      prepared_command = command.to_s
+
+      if params[:options]
+        raise ArgumentError, 'options must be an array!' unless params[:options].is_a?(Array)
+
+        params[:options].each do |option|
+          prepared_command += " -#{option}"
+        end
+      end
+
+      params.each do |param, value|
+        next if param == :options
+
+        if value.is_a?(Array)
+          prepared_command += ' '
+
+          value.each do |v|
+            prepared_command += "#{param}=#{TeamSpeak3::CommandParameter.encode(v)}|"
+          end
+
+          prepared_command = prepared_command[0..-2]
+        else
+          prepared_command += " #{param}=#{TeamSpeak3::CommandParameter.encode(value)}"
+        end
+      end
+
+      @socket.puts(prepared_command)
 
       # every response contains an error information. so we wait until we receive a response
       response = @socket.waitfor(/error id=.*/)
@@ -132,7 +144,7 @@ module TeamSpeak3
         raise TeamSpeak3::Exceptions::CommandExecutionFailed.new(
           response[:errors][:id],
           response[:errors][:msg],
-          command,
+          prepared_command,
         )
       end
 

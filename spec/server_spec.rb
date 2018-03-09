@@ -55,4 +55,34 @@ describe TeamSpeak3::Server do
       end
     end
   end
+
+  describe '#prepare_command' do
+    let(:server) { FactoryBot.build(:server) }
+
+    context 'with options' do
+      it { expect(server.prepare_command(:clientlist, options: [:uid, :away, :voice])).to eq('clientlist -uid -away -voice') }
+    end
+
+    context 'with parameters' do
+      it { expect(server.prepare_command(:clientlist, argument1: 'hello', argument2: 'test')).to \
+                  eq('clientlist argument1=hello argument2=test') }
+    end
+
+    context 'with parameters and options' do
+      it { expect(server.prepare_command(:clientlist, argument1: 'hello', argument2: 'test', options: [:uid, :flags])).to \
+                  eq('clientlist -uid -flags argument1=hello argument2=test') }
+    end
+
+    context 'with arrays as parameters' do
+      it { expect(server.prepare_command(:clientkick, clid: [1,2,3], argument2: 'test')).to \
+                  eq('clientkick clid=1|clid=2|clid=3 argument2=test') }
+    end
+
+    context 'argument encoding' do
+      it { expect(server.prepare_command(:clientkick, argument1: 'I need | encoding!!')).to \
+           eq("clientkick argument1=I\\sneed\\s\\p\\sencoding!!") }
+      it { expect(server.prepare_command(:clientkick, argument: ['I need | encoding!!', 'me | too!!'])).to \
+           eq("clientkick argument=I\\sneed\\s\\p\\sencoding!!|argument=me\\s\\p\\stoo!!") }
+    end
+  end
 end

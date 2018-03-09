@@ -107,7 +107,7 @@ module TeamSpeak3
       true
     end
 
-    def execute(command, params = {})
+    def prepare_command(command, params = {})
       prepared_command = command.to_s
 
       if params[:options]
@@ -134,6 +134,11 @@ module TeamSpeak3
         end
       end
 
+      prepared_command
+    end
+
+    def execute(command, params = {})
+      prepared_command = prepare_command(command, params)
       @socket.puts(prepared_command)
 
       # every response contains an error information. so we wait until we receive a response

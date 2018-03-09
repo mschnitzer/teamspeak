@@ -11,7 +11,9 @@ Gem::Specification.new do |s|
 
   s.files       = Dir[
     'lib/**/*.rb',
-    'spec/**/*.rb'
+    'spec/**/*.rb',
+    '*.md',
+    '.rspec'
   ]
 
   s.add_runtime_dependency 'net-telnet', '~> 0.1', '>= 0.1.1'

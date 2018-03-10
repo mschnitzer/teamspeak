@@ -1,4 +1,4 @@
-## Release 0.0.3 (unknown)
+## Release 0.0.3 (2018-03-10)
 
 * Add `TeamSpeak3::VERSION` to fetch the current version of this library.
 * Add `TeamSpeak3::Client#send_message` to allow to send messages directly via the client object
@@ -10,6 +10,10 @@
 * Command execution on TeamSpeak 3 servers (TeamSpeak3::Server#execute) has been refactored.
 * Add `TeamSpeak3::Server#prepare_command` to build a command that can be executed safely (internally used by
   `TeamSpeak3::Server#execute`)
+* Add `TeamSpeak3::ChannelCollection` that represents an array of channels for a virtual server (abstraction of `Array`)
+* `TeamSpeak3::VirtualServer#channels` now returns an instance of `TeamSpeak3::ChannelCollection`
+* Channels can now be created through `TeamSpeak3::ChannelCollection#create`
+* Channels can now be found with their ID via `TeamSpeak3::ChannelCollection#find`
 
 ## Release 0.0.2 (2018-03-05)
 

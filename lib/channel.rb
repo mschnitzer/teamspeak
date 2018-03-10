@@ -57,6 +57,27 @@ module TeamSpeak3
       @max_family_clients = params[:channel_maxfamilyclients].to_i
     end
 
+    def self.create(virtual_server, name, opts = {})
+      command_parameters = { channel_name: name }
+
+      command_parameters[:channel_topic] = opts[:topic] if opts[:topic]
+      command_parameters[:channel_description] = opts[:description] if opts[:description]
+      command_parameters[:channel_password] = opts[:password] if opts[:password]
+      command_parameters[:channel_codec] = opts[:codec] if opts[:codec]
+      command_parameters[:channel_codec_quality] = opts[:codec_quality] if opts[:codec_quality]
+      command_parameters[:channel_maxclients] = opts[:max_clients] if opts[:max_clients]
+      command_parameters[:channel_maxfamilyclients] = opts[:max_family_clients] if opts[:max_family_clients]
+      command_parameters[:channel_order] = opts[:order] if opts[:order]
+      command_parameters[:channel_needed_talk_power] = opts[:needed_talk_power] if opts[:needed_talk_power]
+      command_parameters[:channel_name_phonetic] = opts[:name_phonetic] if opts[:name_phonetic]
+      command_parameters[:channel_icon_id] = opts[:icon_id] if opts[:icon_id]
+      command_parameters[:channel_codec_is_unencrypted] = opts[:codec_is_unencrypted] if opts[:codec_is_unencrypted]
+      command_parameters[:cpid] = opts[:parent_id] if opts[:parent_id]
+
+      response = virtual_server.execute :channelcreate, command_parameters
+      virtual_server.channels.find(response[:data].first[:cid])
+    end
+
     def codec_name
       return "Speex Narrowband" if @codec == 0
       return "Speex Wideband" if @codec == 1

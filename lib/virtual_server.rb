@@ -29,11 +29,11 @@ module TeamSpeak3
     end
 
     def channels
-      channels_list = []
+      channels_list = ChannelCollection.new(self)
       channels = execute :channellist, options: [:topic, :flags, :voice, :limits, :icon]
 
       channels[:data].each do |channel|
-        channels_list << TeamSpeak3::Channel.new(self, channel)
+        channels_list << Channel.new(self, channel)
       end
 
       channels_list

@@ -1,7 +1,7 @@
 require 'net/telnet'
 
 module TeamSpeak3
-  VERSION = "0.0.4"
+  VERSION = "0.0.5"
 end
 
 # exceptions shall be required first

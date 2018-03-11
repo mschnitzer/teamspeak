@@ -1,3 +1,5 @@
+## Release 0.0.5 (unknown)
+
 ## Release 0.0.4 (2018-03-11)
 
 * Add `TeamSpeak3::VERSION` to fetch the current version of this library.

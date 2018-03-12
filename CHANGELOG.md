@@ -1,5 +1,7 @@
 ## Release 0.0.5 (unknown)
 
+* Add `TeamSpeak3::QueryAccount` to modify the logged in query account. (Accessible via `TeamSpeak3::Server#query_account`)
+
 ## Release 0.0.4 (2018-03-11)
 
 * Add `TeamSpeak3::VERSION` to fetch the current version of this library.

@@ -1,6 +1,7 @@
 module TeamSpeak3
   class Server
     attr_reader :ip_address
+    attr_reader :query_account
     attr_reader :query_port
     attr_reader :socket
     attr_reader :active_server
@@ -43,6 +44,8 @@ module TeamSpeak3
       rescue TeamSpeak3::Exceptions::CommandExecutionFailed => err
         raise TeamSpeak3::Exceptions::QueryLoginFailed, err.message
       end
+
+      @query_account = QueryAccount.new(self, query_user)
 
       true
     end

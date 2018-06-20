@@ -66,6 +66,23 @@ module TeamSpeak3
       server_list
     end
 
+    def create(params = {})
+      creation_params = {}
+
+      creation_params[:virtualserver_name] = params[:name] if params[:name]
+      creation_params[:virtualserver_port] = params[:port] if params[:port]
+      creation_params[:virtualserver_maxclients] = params[:slots] if params[:slots]
+
+      creation_params.merge!(params)
+
+      begin
+        response = execute :servercreate, creation_params
+        { server_id: response[:data][0][:sid].to_i, token: response[:data][0][:token], port: response[:data][0][:virtualserver_port] }
+      rescue Exceptions::CommandExecutionFailed => err
+        raise Exceptions::MaxSlotLimitReached.new('Max slot limit has been reached') if err.message =~ /max slot limit reached/
+      end
+    end
+
     def kick_client!(client_id, action, reason = nil)
       action_id = nil
       action_id = 4 if action == :channel

@@ -1,4 +1,4 @@
-## Release 0.0.5 (unknown)
+## Release 0.0.5 (2018-06-21)
 
 * Add `TeamSpeak3::QueryAccount` to modify the logged in query account. (Accessible via `TeamSpeak3::Server#query_account`)
 * Add `TeamSpeak3::Server#create` to create virtual servers

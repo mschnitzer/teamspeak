@@ -28,6 +28,35 @@ module TeamSpeak3
       @uid = params[:virtualserver_unique_identifier]
     end
 
+    def destroy!
+      execute :serverstop, sid: @id, allow_to_fail: true, ignore_active_server: true
+      execute :serverdelete, sid: @id, ignore_active_server: true
+
+      true
+    end
+
+    def start
+      begin
+        execute :serverstart, sid: @id, ignore_active_server: true
+      rescue Exceptions::CommandExecutionFailed => err
+        raise Exceptions::VirtualServerAlreadyRunning.new(@id) if err.message =~ /server got an invalid status/ && status == :online
+        raise
+      end
+
+      true
+    end
+
+    def stop
+      begin
+        execute :serverstop, sid: @id, ignore_active_server: true
+      rescue Exceptions::CommandExecutionFailed => err
+        raise Exceptions::VirtualServerNotRunning.new(@id) if err.message =~ /server is not running/
+        raise
+      end
+
+      true
+    end
+
     def channels
       channels_list = ChannelCollection.new(self)
       channels = execute :channellist, options: [:topic, :flags, :voice, :limits, :icon]
@@ -55,7 +84,9 @@ module TeamSpeak3
     end
 
     def execute(command, params = {})
-      check_active_server
+      check_active_server unless params[:ignore_active_server]
+      params.delete(:ignore_active_server)
+
       @server.execute(command, params)
     end
 

@@ -158,6 +158,9 @@ module TeamSpeak3
     end
 
     def execute(command, params = {})
+      allow_to_fail = params[:allow_to_fail]
+      params.delete(:allow_to_fail)
+
       prepared_command = prepare_command(command, params)
       @socket.puts(prepared_command)
 
@@ -165,7 +168,7 @@ module TeamSpeak3
       response = @socket.waitfor(/error id=.*/)
 
       response = TeamSpeak3::ServerResponse.parse(response)
-      if response[:errors][:msg] != 'ok'
+      if response[:errors][:msg] != 'ok' && !allow_to_fail
         raise TeamSpeak3::Exceptions::CommandExecutionFailed.new(
           response[:errors][:id],
           response[:errors][:msg],

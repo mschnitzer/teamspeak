@@ -1,3 +1,11 @@
+## Release 0.0.6 (2018-06-24)
+
+### Virtual Servers
+
+* Add method to start virtual servers (#start)
+* Add method to stop virtual servers (#stop)
+* Add method to delete/destroy virtual servers (#destroy!)
+
 ## Release 0.0.5 (2018-06-21)
 
 * Add `TeamSpeak3::QueryAccount` to modify the logged in query account. (Accessible via `TeamSpeak3::Server#query_account`)
